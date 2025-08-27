@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "c77d7c32-2f9c-4f16-9212-bc80c4d0de19",
+		"name": "Register",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44008067"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse expected values từ CSV\r",
+							"let expectedStatus = parseInt(data.expected_status);\r",
+							"let expectedError = data.expected_errors;\r",
+							"\r",
+							"// Kiểm tra status code\r",
+							"pm.test(\"Status code phải bằng \" + expectedStatus, function () {\r",
+							"    pm.response.to.have.status(expectedStatus);\r",
+							"});\r",
+							"\r",
+							"// Nếu là lỗi validation (422 hoặc 400) thì kiểm tra field lỗi\r",
+							"if (expectedStatus === 422 || expectedStatus === 400) {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.test(\"Phản hồi phải có lỗi cho field: \" + expectedError, function () {\r",
+							"        pm.expect(JSON.stringify(jsonData)).to.include(expectedError);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// Nếu là success (201) thì kiểm tra có id và email\r",
+							"if (expectedStatus === 201) {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.test(\"Phải trả về id\", function () {\r",
+							"        pm.expect(jsonData).to.have.property(\"id\");\r",
+							"    });\r",
+							"    pm.test(\"Email khớp\", function () {\r",
+							"        pm.expect(jsonData.email).to.eql(data.email);\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"{{first_name}}\",\r\n  \"last_name\": \"{{last_name}}\",\r\n  \"address\": \"{{address}}\",\r\n  \"city\": \"{{city}}\",\r\n  \"state\": \"{{state}}\",\r\n  \"country\": \"{{country}}\",\r\n  \"postcode\": \"{{postcode}}\",\r\n  \"phone\": \"{{phone}}\",\r\n  \"dob\": \"{{dob}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

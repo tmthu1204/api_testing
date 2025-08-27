@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "6de30083-1920-41fa-9906-e03b2c6ef8a5",
+		"name": "Put Invoices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44008067"
+	},
+	"item": [
+		{
+			"name": "Edit Invoices",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let expectedStatus = parseInt(pm.iterationData.get(\"expected_status\"));\r",
+							"let expectedMessage = pm.iterationData.get(\"expected_message\");\r",
+							"\r",
+							"// Kiểm tra status code\r",
+							"pm.test(\"Status code phải bằng \" + expectedStatus, function () {\r",
+							"    pm.response.to.have.status(expectedStatus);\r",
+							"});\r",
+							"\r",
+							"// Nếu có expected_message thì check trong response\r",
+							"if (expectedMessage && expectedMessage.length > 0) {\r",
+							"    let jsonData = {};\r",
+							"    try { jsonData = pm.response.json(); } catch (e) {}\r",
+							"    \r",
+							"    pm.test(\"Response message chứa: \" + expectedMessage, function () {\r",
+							"        pm.expect(JSON.stringify(jsonData)).to.include(expectedMessage);\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTYyODk4NDYsImV4cCI6MTc3MTg4OTg0NiwibmJmIjoxNzU2Mjg5ODQ3LCJqdGkiOiJ0U20yMnQ3eVJLUHhXYTg4Iiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoiYWRtaW4ifQ.D0Vy19INXvOhvFsu0yR8IPWpRptW3O6LOLV-g3P5wCY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"status\": \"{{status}}\",\r\n  \"status_message\": \"{{status_message}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/invoices/{{invoiceId}}/status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"invoices",
+						"{{invoiceId}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

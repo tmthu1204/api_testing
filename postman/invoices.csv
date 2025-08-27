@@ -1,0 +1,7 @@
+invoiceId,status,status_message,expected_status,expected_message
+1,AWAITING_FULFILLMENT,"Đơn hàng chờ xử lý",200, 
+2,SHIPPED,"Đơn hàng đã gửi",200, 
+3,INVALID,"Trạng thái không hợp lệ",422, 
+999999999x,SHIPPED,"Cập nhật đơn hàng không tồn tại",404,"Requested item not found" 
+0,SHIPPED,"Đơn hàng cập nhật thành công",200,""
+5,,"Thiếu status",404, "Requested item not found" 

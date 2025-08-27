@@ -1,0 +1,5 @@
+userId,first_name,last_name,email,password,address,city,state,country,postcode,phone,dob,expected_status,expected_message
+201,John,Updated,john.updated@example.com,newpass123,Street 10,HCM,HCM,VN,70000,0909009001,1985-05-10,200,
+201,,Doe,test1@example.com,password123,Street 1,HN,HN,VN,10000,0901234567,1990-01-01,422,"first_name"
+201,Lan,,lan@example.com,password123,Street 2,HN,HN,VN,10001,0907654321,1991-01-01,422,"last_name"
+9999,Test,User,ghost@example.com,password123,Street 9,HCM,HCM,VN,70001,0908888888,1992-02-02,404,"Requested item not found"
