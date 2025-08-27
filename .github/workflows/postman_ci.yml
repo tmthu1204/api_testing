@@ -12,17 +12,17 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       - name: Install Newman
         run: npm install -g newman
 
-      - name: Run Postman tests - Register
+      - name: Run Postman tests - Register 
         run: |
           newman run postman/register.json \
             -e postman/api_env.json \
@@ -47,7 +47,7 @@ jobs:
             --reporter-junit-export results-edit-invoices.xml
 
       - name: Upload Test Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: postman-results
           path: "*.xml"
