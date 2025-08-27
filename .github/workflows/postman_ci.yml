@@ -8,7 +8,7 @@ on:
 
 jobs:
   postman:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
@@ -23,6 +23,7 @@ jobs:
         run: npm install -g newman
 
       - name: Run Postman tests - Register 
+        continue-on-error: true
         run: |
           newman run postman/register.json \
             -e postman/api_env.json \
@@ -31,6 +32,7 @@ jobs:
             --reporter-junit-export results-register.xml
 
       - name: Run Postman tests - Edit User
+        continue-on-error: true
         run: |
           newman run postman/edit_user.json \
             -e postman/api_env.json \
@@ -39,6 +41,7 @@ jobs:
             --reporter-junit-export results-edit-user.xml
 
       - name: Run Postman tests - Edit Invoices
+        continue-on-error: true
         run: |
           newman run postman/edit_invoices.json \
             -e postman/api_env.json \
@@ -46,7 +49,25 @@ jobs:
             --reporters cli,junit \
             --reporter-junit-export results-edit-invoices.xml
 
+      - name: Evaluate test results
+        run: |
+          set -e
+          failed=0
+          for f in results-*.xml; do
+            if grep -q 'failures="0"' "$f"; then
+              echo "OK: $f"
+            else
+              echo "FAILED: $f"
+              failed=1
+            fi
+          done
+          if [ $failed -ne 0 ]; then
+            echo "One or more collections failed."
+            exit 1
+          fi
+
       - name: Upload Test Reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: postman-results
